@@ -1,5 +1,5 @@
 
-use std::io::stdin;
+use std::io::{stdin, Read};
 
 const BUFFER_SIZE: usize = 30000;
 
@@ -47,7 +47,11 @@ impl Buffer {
     }
 
     pub fn read(&mut self) {
-        stdin().read_line(&mut self.input_buf).unwrap();
+        let mut buf = String::new();
+        let mut h = stdin();
+        h.lock();
+        h.read_to_string(&mut buf).ok();
+        self.input_buf.push_str(buf.as_str());
         *self.get_mut().unwrap() = self.input_buf.remove(0) as u8;
     }
 }
